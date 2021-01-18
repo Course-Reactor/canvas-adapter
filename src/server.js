@@ -31,6 +31,7 @@ const typeDefs = gql`
 
   type Query {
     enrollment_terms: [EnrollmentTerm]
+    enrollment_term(id: ID!): EnrollmentTerm
     users: [User]
   }
 `;
@@ -43,6 +44,14 @@ const resolvers = {
         return response.data.enrollment_terms;
       } catch (e) {
         console.error("Error fetching enrollment_terms: ", e);
+      }
+    },
+    enrollment_term: async (_parent, { id }) => {
+      try {
+        const response = await axios.get(`/accounts/${ACCOUNT_ID}/terms/${id}`);
+        return response.data;
+      } catch (e) {
+        console.error("Error fetching enrollment_term: ", e);
       }
     },
     users: async () => {
