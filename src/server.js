@@ -31,7 +31,7 @@ const typeDefs = gql`
 
   type Query {
     enrollment_terms: [EnrollmentTerm]
-    enrollment_term(id: ID!): EnrollmentTerm
+    enrollment_term(id: String!): EnrollmentTerm
     users: [User]
   }
 `;
