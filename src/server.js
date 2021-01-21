@@ -1,7 +1,12 @@
 "use strict";
 
+const fs = require("fs");
 const { ApolloServer, gql } = require("apollo-server");
 const axios = require("axios");
+
+if (!fs.existsSync(process.cwd() + ".env")) {
+  require("dotenv").config();
+}
 
 const ACCOUNT_ID = process.env.ACCOUNT_ID;
 
@@ -29,9 +34,21 @@ const typeDefs = gql`
     last_login: String
   }
 
+  type Course {
+    id: Int
+    name: String
+    course_code: String
+    workflow_state: String
+    enrollment_term_id: Int
+    start_at: String
+    end_at: String
+    total_students: Int
+  }
+
   type Query {
     enrollment_terms: [EnrollmentTerm]
     enrollment_term(id: String!): EnrollmentTerm
+    courses: [Course]
     users: [User]
   }
 `;
@@ -52,6 +69,14 @@ const resolvers = {
         return response.data;
       } catch (e) {
         console.error("Error fetching enrollment_term: ", e);
+      }
+    },
+    courses: async () => {
+      try {
+        const response = await axios.get(`/accounts/${ACCOUNT_ID}/courses`);
+        return response.data;
+      } catch (e) {
+        console.error("Error fetching courses: ", e);
       }
     },
     users: async () => {
