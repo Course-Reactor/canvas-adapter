@@ -73,7 +73,9 @@ const resolvers = {
     },
     courses: async () => {
       try {
-        const response = await axios.get(`/accounts/${ACCOUNT_ID}/courses`);
+        const response = await axios.get(
+          `/accounts/${ACCOUNT_ID}/courses?include[]=total_students`
+        );
         return response.data;
       } catch (e) {
         console.error("Error fetching courses: ", e);
